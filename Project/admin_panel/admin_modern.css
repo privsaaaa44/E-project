@@ -1,0 +1,125 @@
+/* Modern Admin UI for Cinevo */
+:root {
+    --admin-primary: #3b82f6;
+    --admin-bg: #f1f5f9;
+    --admin-sidebar: #ffffff;
+    --admin-text: #1e293b;
+    --admin-border: #e2e8f0;
+}
+
+body {
+    background-color: var(--admin-bg);
+    color: var(--admin-text);
+    font-family: 'Inter', sans-serif;
+}
+
+#sidebar {
+    width: 260px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    background: var(--admin-sidebar);
+    border-right: 1px solid var(--admin-border);
+    transition: all 0.3s;
+    z-index: 999;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--admin-border);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: var(--admin-primary);
+}
+
+#sidebar ul.components {
+    padding: 1rem 0;
+}
+
+#sidebar ul li a {
+    padding: 0.75rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: var(--admin-text);
+    text-decoration: none;
+    transition: all 0.2s;
+    font-weight: 500;
+}
+
+#sidebar ul li a:hover, #sidebar ul li.active a {
+    background: rgba(59, 130, 246, 0.05);
+    color: var(--admin-primary);
+    border-right: 3px solid var(--admin-primary);
+}
+
+#sidebar ul li a i {
+    width: 20px;
+}
+
+#page-container {
+    margin-left: 260px;
+    min-height: 100vh;
+}
+
+.top-header {
+    height: 64px;
+    background: white;
+    border-bottom: 1px solid var(--admin-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 998;
+}
+
+#content {
+    padding: 2rem;
+}
+
+.card {
+    background: white;
+    border: 1px solid var(--admin-border);
+    border-radius: 12px;
+    box-shadow: none;
+    margin-bottom: 1.5rem;
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--admin-border);
+    padding: 1.25rem;
+    font-weight: 600;
+}
+
+.table {
+    margin-bottom: 0;
+}
+
+.table th {
+    background: #f8fafc;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-top: none;
+    padding: 1rem;
+}
+
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+.btn-primary { background-color: var(--admin-primary); border-color: var(--admin-primary); }
+.btn-primary:hover { background-color: #2563eb; border-color: #2563eb; }
+
+/* Responsive */
+@media (max-width: 991.98px) {
+    #sidebar { margin-left: -260px; }
+    #sidebar.active { margin-left: 0; }
+    #page-container { margin-left: 0; }
+}
