@@ -34,7 +34,7 @@ $users = get_all_users($connection);
                 <tr>
                     <td class="ps-4">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:32px;height:32px;font-weight:bold;font-size:14px;"><?php echo strtoupper(substr($user['name'], 0, 1)); ?></div>
+                            <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($user['name']); ?>&background=random" class="rounded-circle" width="32">
                             <div class="fw-bold text-main"><?php echo htmlspecialchars($user['name']); ?></div>
                         </div>
                     </td>

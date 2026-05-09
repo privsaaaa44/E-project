@@ -11,18 +11,17 @@ if (session_status() === PHP_SESSION_NONE) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Cinevo - Online Movie Booking</title>
-    <!-- Fonts (Local for Offline) -->
-    <link href="css/lib/inter-font.css" rel="stylesheet">
-    <!-- Frameworks (Local for Offline) -->
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Frameworks -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <!-- Custom Modern Theme -->
     <link href="css/modern.css" rel="stylesheet">
-    <!-- Libraries (Local for Offline) -->
-    <script src="js/lib/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
-    <!-- SweetAlert2 (Local for Offline) -->
-    <script src="js/lib/sweetalert2.all.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>

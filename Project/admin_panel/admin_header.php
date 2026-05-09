@@ -22,13 +22,12 @@ switch ($current_page) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Cinevo</title>
-    <!-- Fonts & Libraries (Local for Offline) -->
-    <link href="../css/lib/inter-font.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/lib/fontawesome.all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/lib/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <link href="admin_modern.css" rel="stylesheet">
-    <script src="../js/lib/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav id="sidebar">
@@ -77,7 +76,7 @@ switch ($current_page) {
                 </div>
                 <div class="dropdown">
                     <a href="#" class="dropdown-toggle text-decoration-none" data-bs-toggle="dropdown">
-                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width:38px;height:38px;font-weight:bold;"><?php echo strtoupper(substr($_SESSION['user_name'], 0, 1)); ?></div>
+                        <img src="https://ui-avatars.com/api/?name=<?php echo urlencode($_SESSION['user_name']); ?>&background=3b82f6&color=fff" class="rounded-circle" width="38" alt="Admin">
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-3">
                         <li><a class="dropdown-item py-2" href="../logout.php"><i class="fas fa-sign-out-alt me-2 text-danger"></i> Logout</a></li>
