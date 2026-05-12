@@ -101,13 +101,19 @@ $posterPath = !empty($detail['poster']) ? 'images/' . $detail['poster'] : 'img/b
                     <h5 class="fw-bold text-main mb-3">Available Showtimes</h5>
                     <div class="d-flex gap-2 flex-wrap mb-4">
                         <?php
-                        $shows_query = mysqli_query($connection, "SELECT DISTINCT show_time FROM shows WHERE movie_id = $movie_id AND show_date >= CURDATE() LIMIT 4");
+                        $shows_query = mysqli_query($connection, "SELECT DISTINCT show_time, show_date FROM shows WHERE movie_id = $movie_id AND show_date >= CURDATE() LIMIT 4");
                         if(mysqli_num_rows($shows_query) > 0):
                             while($show = mysqli_fetch_assoc($shows_query)):
                         ?>
-                            <span class="badge bg-light text-dark text-main border px-3 py-2 fs-6 fw-normal">
+                        <div class="d-flex">
+   <span class="badge bg-light text-dark text-main border px-3 py-2 fs-6 fw-normal">
                                 <i class="fa fa-clock-o me-1 text-primary"></i> <?php echo date('h:i A', strtotime($show['show_time'])); ?>
                             </span>
+                               <span class="badge bg-light text-dark text-main border px-3 py-2 fs-6 fw-normal">
+                                <i class="fa fa-calendar me-1 text-primary"></i> <?php echo date('M d, Y', strtotime($show['show_date'])); ?>
+                            </span>
+                        </div>
+                         
                         <?php endwhile; else: ?>
                             <p class="text-muted small">No upcoming shows scheduled yet.</p>
                         <?php endif; ?>
