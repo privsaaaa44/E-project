@@ -100,23 +100,53 @@ $posterPath = !empty($detail['poster']) ? 'images/' . $detail['poster'] : 'img/b
                 <div class="showtimes-section mb-4">
                     <h5 class="fw-bold text-main mb-3">Available Showtimes</h5>
                     <div class="d-flex gap-2 flex-wrap mb-4">
-                        <?php
-                        $shows_query = mysqli_query($connection, "SELECT DISTINCT show_time, show_date FROM shows WHERE movie_id = $movie_id AND show_date >= CURDATE() LIMIT 4");
-                        if(mysqli_num_rows($shows_query) > 0):
-                            while($show = mysqli_fetch_assoc($shows_query)):
-                        ?>
-                        <div class="d-flex">
-   <span class="badge bg-light text-dark text-main border px-3 py-2 fs-6 fw-normal">
-                                <i class="fa fa-clock-o me-1 text-primary"></i> <?php echo date('h:i A', strtotime($show['show_time'])); ?>
-                            </span>
-                               <span class="badge bg-light text-dark text-main border px-3 py-2 fs-6 fw-normal">
-                                <i class="fa fa-calendar me-1 text-primary"></i> <?php echo date('M d, Y', strtotime($show['show_date'])); ?>
-                            </span>
-                        </div>
-                         
-                        <?php endwhile; else: ?>
-                            <p class="text-muted small">No upcoming shows scheduled yet.</p>
-                        <?php endif; ?>
+         <?php
+$shows_query = mysqli_query($connection, 
+    "SELECT shows.show_time, shows.show_date, shows.id,
+            theaters.theater_name, theaters.location 
+     FROM shows 
+     INNER JOIN theaters ON shows.theater_id = theaters.id 
+     WHERE shows.movie_id = $movie_id AND shows.show_date >= CURDATE() 
+     LIMIT 4"
+);
+if(mysqli_num_rows($shows_query) > 0):
+    while($show = mysqli_fetch_assoc($shows_query)):
+?>
+
+<div style="background:#fff; border:1px solid #e5e7eb; border-radius:8px; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; width: 100%;">
+    <!-- Left Side -->
+    <div style="display:flex; align-items:center; gap:18px;">
+        <!-- Blue Circle Icon -->
+        <div style="width:42px; height:42px; border-radius:50%; background:#eff6ff; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <i class="fa fa-map-marker" style="color:#3b82f6; font-size:20px;"></i>
+        </div>
+        <!-- Theater Info -->
+        <div>
+            <div style="font-weight:700; color:#111; font-size:15px; margin-bottom:6px;">
+                <?php echo htmlspecialchars($show['theater_name']); ?>, <?php echo htmlspecialchars($show['location']); ?>
+            </div>
+            <div style="display:flex; gap:8px;">
+                <span style="border:1px solid #bfdbfe; border-radius:6px; padding:3px 10px; font-size:13px; color: #1d4ed8; background: #eff6ff;">
+                    <i class="fa fa-clock-o" style="color:#3b82f6; margin-right:4px;"></i>
+                    <?php echo date('h:i A', strtotime($show['show_time'])); ?>
+                </span>
+                <span style="border:1px solid #bfdbfe; border-radius:6px; padding:3px 10px; font-size:13px; color: #1d4ed8; background: #eff6ff;">
+                    <i class="fa fa-calendar" style="color:#3b82f6; margin-right:4px;"></i>
+                    <?php echo date('M d, Y', strtotime($show['show_date'])); ?>
+                </span>
+            </div>
+        </div>
+    </div>
+  <a href="bookings.php?movie_id=<?php echo $movie_id; ?>&show_id=<?php echo $show['id']; ?>" 
+       onclick="return checkLogin(event)"
+       class="btn btn-outline-primary">
+        Book Tickets
+    </a>
+</div>
+
+<?php endwhile; else: ?>
+    <p class="text-muted small">No upcoming shows scheduled yet.</p>
+<?php endif; ?>
                     </div>
                 </div>
 
