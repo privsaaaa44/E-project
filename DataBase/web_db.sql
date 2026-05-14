@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 08, 2026 at 08:15 PM
+-- Generation Time: May 14, 2026 at 02:06 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -48,7 +48,11 @@ CREATE TABLE `bookings` (
 
 INSERT INTO `bookings` (`id`, `user_id`, `show_id`, `class_id`, `total_seats`, `total_price`, `booking_date`, `has_kids`, `kids_count`, `adults_count`, `payment_status`, `booking_status`) VALUES
 (21, 2, 6, 1, 1, 900.00, '2026-05-08', 0, 0, 1, 'pending', 'confirmed'),
-(22, 2, 6, 1, 1, 900.00, '2026-05-08', 0, 0, 1, 'pending', 'confirmed');
+(22, 2, 6, 1, 1, 900.00, '2026-05-08', 0, 0, 1, 'pending', 'confirmed'),
+(23, 2, 6, 1, 4, 3600.00, '2026-05-09', 0, 0, 4, 'pending', 'confirmed'),
+(24, 2, 6, 4, 2, 1800.00, '2026-05-12', 0, 0, 2, 'pending', 'confirmed'),
+(25, 2, 6, 4, 2, 1350.00, '2026-05-12', 1, 1, 1, 'pending', 'confirmed'),
+(26, 2, 6, 4, 3, 2700.00, '2026-05-12', 0, 0, 3, 'pending', 'confirmed');
 
 -- --------------------------------------------------------
 
@@ -68,7 +72,18 @@ CREATE TABLE `booking_seats` (
 
 INSERT INTO `booking_seats` (`id`, `booking_id`, `seat_id`) VALUES
 (24, 21, 576),
-(25, 22, 577);
+(25, 22, 577),
+(26, 23, 578),
+(27, 23, 579),
+(28, 23, 580),
+(29, 23, 581),
+(30, 24, 556),
+(31, 24, 557),
+(32, 25, 558),
+(33, 25, 559),
+(34, 26, 560),
+(35, 26, 561),
+(36, 26, 562);
 
 -- --------------------------------------------------------
 
@@ -107,7 +122,8 @@ INSERT INTO `category` (`id`, `category_name`, `status`) VALUES
 (2, 'Triller', 'Active'),
 (5, 'Comedy', 'Active'),
 (6, 'Drama', 'Active'),
-(9, 'Marvel', 'Active');
+(9, 'Marvel', 'Active'),
+(14, 'Horror', 'Active');
 
 -- --------------------------------------------------------
 
@@ -157,8 +173,8 @@ CREATE TABLE `movies` (
 --
 
 INSERT INTO `movies` (`id`, `poster`, `title`, `trailer_link`, `movie_desc`, `duration`, `created_at`, `release_date`, `director`, `rating`, `language`, `movie_status`, `is_featured`, `genre`) VALUES
-(1, 'poster_69fb6a5184f78.jpg', 'Hera Pheri 2', 'https://www.youtube.com/watch?v=Im_lCAsA27Q', 'Phir Hera Pheri (2006) is a Bollywood comedy-crime film and the sequel to the 2000 cult classic Hera Pheri. Written and directed by Neeraj Vora, the film continues the misadventures of the iconic trio—Raju (Akshay Kumar), Shyam (Suniel Shetty), and Babura', '3 hour 5 minute', '2026-05-06 16:20:33', '2026-06-12', 'John Deo', NULL, 'Urdu', 'now_showing', 0, NULL),
-(5, 'poster_69fb6c4c7bec1.jpg', 'Toy Story', 'https://www.youtube.com/watch?v=c51ND9Hdbw0', 'Toy Story (1995) is a groundbreaking computer-animated film from Pixar about the secret life of toys. When a lanky cowboy doll named Woody (Tom Hanks) feels threatened by a new, flashy spaceman action figure, Buzz Lightyear (Tim Allen), his jealousy lands', '4 hour 30 minute', '2026-05-08 13:32:00', '2026-07-09', 'Ghaffar', '2.000000000', 'English,Urdu', 'upcoming', 0, NULL);
+(1, 'poster_69fb6a5184f78.jpg', 'Hera Pheri 2', 'https://www.youtube.com/watch?v=Im_lCAsA27Q', 'Phir Hera Pheri (2006) is a Bollywood comedy-crime film and the sequel to the 2000 cult classic Hera Pheri. Written and directed by Neeraj Vora, the film continues the misadventures of the iconic trio—Raju (Akshay Kumar), Shyam (Suniel Shetty), and Babura', '3 hour 5 minute', '2026-05-13 16:51:21', '2026-06-12', 'John Deo', '2.000000000', 'Urdu', 'now_showing', 0, NULL),
+(5, 'poster_69fb6c4c7bec1.jpg', 'Toy Story', 'https://www.youtube.com/watch?v=c51ND9Hdbw0', 'Toy Story (1995) is a groundbreaking computer-animated film from Pixar about the secret life of toys. When a lanky cowboy doll named Woody (Tom Hanks) feels threatened by a new, flashy spaceman action figure, Buzz Lightyear (Tim Allen), his jealousy lands', '4 hour 30 minute', '2026-05-13 17:07:27', '2026-07-09', 'Ghaffar', '2.000000000', 'English,Urdu', 'upcoming', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -177,8 +193,7 @@ CREATE TABLE `movie_category` (
 --
 
 INSERT INTO `movie_category` (`id`, `movi_id`, `cat_id`) VALUES
-(11, 1, 5),
-(12, 5, 6);
+(11, 1, 5);
 
 -- --------------------------------------------------------
 
@@ -200,7 +215,8 @@ CREATE TABLE `review` (
 --
 
 INSERT INTO `review` (`id`, `users_id`, `movies_id`, `review`, `rating`, `created_at`) VALUES
-(2, 2, 5, 'good show', 2, '2026-05-08 13:32:00');
+(2, 2, 5, 'good show', 2, '2026-05-08 13:32:00'),
+(4, 2, 1, 'good movie', 2, '2026-05-13 16:51:21');
 
 -- --------------------------------------------------------
 
@@ -280,7 +296,8 @@ CREATE TABLE `shows` (
 --
 
 INSERT INTO `shows` (`id`, `movie_id`, `theater_id`, `show_date`, `show_time`, `created_at`) VALUES
-(6, 1, 3, '2026-06-27', '12:00:00', '2026-05-08 18:00:16');
+(6, 1, 3, '2026-06-27', '12:00:00', '2026-05-08 18:00:16'),
+(345, 1, 4, '2026-05-16', '17:07:00', '2026-05-14 12:01:35');
 
 -- --------------------------------------------------------
 
@@ -302,7 +319,16 @@ CREATE TABLE `show_class_pricing` (
 INSERT INTO `show_class_pricing` (`id`, `show_id`, `class_id`, `price`) VALUES
 (18, 6, 4, 900.00),
 (19, 6, 2, 900.00),
-(20, 6, 1, 900.00);
+(20, 6, 1, 900.00),
+(1033, 345, 4, 900.00),
+(1034, 345, 2, 1200.00),
+(1035, 345, 1, 1500.00),
+(1036, 345, 4, 0.00),
+(1037, 345, 2, 0.00),
+(1038, 345, 1, 0.00),
+(1039, 345, 4, 900.00),
+(1040, 345, 2, 1200.00),
+(1041, 345, 1, 1500.00);
 
 -- --------------------------------------------------------
 
@@ -457,13 +483,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `booking_seats`
 --
 ALTER TABLE `booking_seats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `carousel`
@@ -475,13 +501,13 @@ ALTER TABLE `carousel`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `classes`
 --
 ALTER TABLE `classes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `movies`
@@ -499,7 +525,7 @@ ALTER TABLE `movie_category`
 -- AUTO_INCREMENT for table `review`
 --
 ALTER TABLE `review`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `seats`
@@ -511,13 +537,13 @@ ALTER TABLE `seats`
 -- AUTO_INCREMENT for table `shows`
 --
 ALTER TABLE `shows`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=343;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=346;
 
 --
 -- AUTO_INCREMENT for table `show_class_pricing`
 --
 ALTER TABLE `show_class_pricing`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1029;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1042;
 
 --
 -- AUTO_INCREMENT for table `theaters`
