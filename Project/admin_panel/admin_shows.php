@@ -21,7 +21,7 @@ $now_showing_movies = mysqli_fetch_all($now_showing_result, MYSQLI_ASSOC);
                     <select name="movie_id" class="form-select py-2" required>
                         <option selected disabled>Select movie...</option>
                         <?php foreach ($now_showing_movies as $movie): ?>
-                            <option value="<?php echo $movie['id']; ?>">
+                            <option  value="<?php echo $movie['id']; ?>">
                                 <?php echo htmlspecialchars($movie['title']); ?>
                             </option>
                         <?php endforeach; ?>
@@ -39,11 +39,11 @@ $now_showing_movies = mysqli_fetch_all($now_showing_result, MYSQLI_ASSOC);
                 <div class="row g-2 mb-3">
                     <div class="col-6">
                         <label class="form-label small fw-bold text-muted">DATE</label>
-                        <input type="date" name="show_date" class="form-control" required>
+                         <input type="date" name="show_date" id="showDate" class="form-control" required>
                     </div>
                     <div class="col-6">
                         <label class="form-label small fw-bold text-muted">TIME</label>
-                        <input type="time" name="show_time" class="form-control" required>
+                        <input type="time" name="show_time" id="showTime" class="form-control" required>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -195,6 +195,34 @@ $now_showing_movies = mysqli_fetch_all($now_showing_result, MYSQLI_ASSOC);
 </div>
 
 <script>
+    // Date min = today
+const today = new Date();
+const yyyy = today.getFullYear();
+const mm = String(today.getMonth() + 1).padStart(2, '0');
+const dd = String(today.getDate()).padStart(2, '0');
+const todayStr = `${yyyy}-${mm}-${dd}`;
+
+const showDate = document.getElementById('showDate');
+const showTime = document.getElementById('showTime');
+
+if (showDate) showDate.min = todayStr;
+
+// Agar aaj ki date select ho toh time bhi current se aage
+function updateTimeMin() {
+    if (!showDate || !showTime) return;
+    if (showDate.value === todayStr) {
+        const hh = String(today.getHours()).padStart(2, '0');
+        const min = String(today.getMinutes()).padStart(2, '0');
+        showTime.min = `${hh}:${min}`;
+    } else {
+        showTime.min = '';
+    }
+}
+
+if (showDate) {
+    showDate.addEventListener('change', updateTimeMin);
+    updateTimeMin(); // page load pe bhi check karo
+}
 document.addEventListener('DOMContentLoaded', function() {
     const showSearch = document.getElementById('showSearch');
     if (showSearch) {
@@ -216,6 +244,33 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('editShowTime').value = this.dataset.time;
             editModal.show();
         });
+    });
+});
+// Edit modal - date/time min restriction
+const editShowDate = document.getElementById('editShowDate');
+const editShowTime = document.getElementById('editShowTime');
+
+if (editShowDate) editShowDate.min = todayStr;
+
+function updateEditTimeMin() {
+    if (!editShowDate || !editShowTime) return;
+    if (editShowDate.value === todayStr) {
+        const hh = String(today.getHours()).padStart(2, '0');
+        const min = String(today.getMinutes()).padStart(2, '0');
+        editShowTime.min = `${hh}:${min}`;
+    } else {
+        editShowTime.min = '';
+    }
+}
+
+if (editShowDate) {
+    editShowDate.addEventListener('change', updateEditTimeMin);
+}
+
+// Jab edit modal open ho tab bhi check karo
+document.querySelectorAll('.edit-show-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        setTimeout(updateEditTimeMin, 100); // modal open hone ke baad run karo
     });
 });
 </script>
