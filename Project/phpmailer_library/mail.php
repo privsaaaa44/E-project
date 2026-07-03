@@ -1,61 +1,51 @@
 <?php
-//Import PHPMailer classes into the global namespace
-//These must be at the top of your script, not inside a function
+/**
+ * mail.php - PHPMailer Helper File
+ * Yeh file direct use nahi hoti, contact.php use karti hai
+ * Agar directly test karna ho to niche ka code use karein
+ */
+
+// Config load karo
+if (!defined('MAIL_USERNAME')) {
+    require_once __DIR__ . '/../config.php';
+}
+
+// PHPMailer autoload - __DIR__ se correct path
+require_once __DIR__ . '/vendor/autoload.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-//Load Composer's autoloader (created by composer, not included with PHPMailer)
-require 'vendor/autoload.php';
-
-//Create an instance; passing `true` enables exceptions
-$mail = new PHPMailer(true);
-
-// form email code
-
-if(isset($_POST['contact_submit'])) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $subject = $_POST['subject'];
-    $message = $_POST['message'];
-
-
-    // mail code
+/**
+ * Helper function: Email bhejne ke liye
+ * @param string $to_email  - Receiver email
+ * @param string $to_name   - Receiver naam
+ * @param string $subject   - Subject
+ * @param string $body      - HTML body
+ * @return bool|string      - true on success, error message on failure
+ */
+function send_email($to_email, $to_name, $subject, $body) {
+    $mail = new PHPMailer(true);
     try {
-    //Server settings
-    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-    $mail->isSMTP();                                            //Send using SMTP
-    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = 'apupd125690@gmail.com';                                       //SMTP username
-    $mail->Password   = 'gwbh alki bvpk prwg';                               //SMTP password
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-    $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $mail->isSMTP();
+        $mail->Host       = MAIL_HOST;
+        $mail->SMTPAuth   = true;
+        $mail->Username   = MAIL_USERNAME;
+        $mail->Password   = MAIL_PASSWORD;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->Port       = MAIL_PORT;
 
-    //Recipients
-    $mail->setFrom('apupd125690@gmail.com', 'aptech');
-    $mail->addAddress($email, $name,$phone,$subject,$message);     //Add a recipient
-    // $mail->addAddress('ellen@example.com');               //Name is optional
-    // $mail->addReplyTo('info@example.com', 'Information');
-    // $mail->addCC('cc@example.com');
-    // $mail->addBCC('bcc@example.com');
+        $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME);
+        $mail->addAddress($to_email, $to_name);
 
-    //Attachments
-    // $mail->addAttachment('/var/tmp/file.tar.gz');         //Add attachments
-    // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    //Optional name
-
-    //Content
-    $mail->isHTML(true);                                  //Set email format to HTML
-     $mail->Subject = 'thank you for contacting us';
-    $mail->Body    = 'Hi ' . $name . ', Welcome to <b>priyadeviaptech</b>!';
-    // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
- 
-    $mail->send();
-    echo 'Message has been sent';
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        $mail->isHTML(true);
+        $mail->Subject = $subject;
+        $mail->Body    = $body;
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        return "Mailer Error: {$mail->ErrorInfo}";
+    }
 }
-
-}
-
+?>

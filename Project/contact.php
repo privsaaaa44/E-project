@@ -2,6 +2,11 @@
 include_once "header.php";
 include_once "connection.php";
 
+// Config file load karo (agar pehle se nahi hua)
+if (!defined('MAIL_USERNAME')) {
+    require_once __DIR__ . '/config.php';
+}
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -10,58 +15,62 @@ $message_sent = false;
 $error_message = '';
 
 if (isset($_POST['contact_submit'])) {
-    require 'phpmailer_library/vendor/autoload.php';
+    // __DIR__ se autoload.php ka sahi path
+    $autoload = __DIR__ . '/phpmailer_library/vendor/autoload.php';
+    
+    if (!file_exists($autoload)) {
+        $error_message = 'PHPMailer library not found. Please contact the administrator.';
+    } else {
+        require $autoload;
 
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $phone = $_POST['phone'];
-    $subject = $_POST['subject'];
-    $message = $_POST['message'];
+        $name    = htmlspecialchars(trim($_POST['name']));
+        $email   = htmlspecialchars(trim($_POST['email']));
+        $phone   = htmlspecialchars(trim($_POST['phone'] ?? ''));
+        $subject = htmlspecialchars(trim($_POST['subject']));
+        $message = htmlspecialchars(trim($_POST['message']));
 
-    $mail = new PHPMailer(true);
+        $mail = new PHPMailer(true);
 
-    try {
-        // Server settings
-        $mail->isSMTP();
-        $mail->Host       = 'smtp.gmail.com';
-        $mail->SMTPAuth   = true;
-        $mail->Username   = 'apupd125690@gmail.com'; // Admin Gmail
-        $mail->Password   = 'gwbh alki bvpk prwg';   // App Password
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-        $mail->Port       = 465;
+        try {
+            // Server settings - config.php se
+            $mail->isSMTP();
+            $mail->Host       = MAIL_HOST;
+            $mail->SMTPAuth   = true;
+            $mail->Username   = MAIL_USERNAME;
+            $mail->Password   = MAIL_PASSWORD;
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+            $mail->Port       = MAIL_PORT;
 
-        // 1. Send email to Admin
-        $mail->setFrom('apupd125690@gmail.com', 'Cinevo Contact Form');
-        $mail->addAddress('apupd125690@gmail.com', 'Admin'); // Send to yourself
-        $mail->addReplyTo($email, $name); // Reply to the user who filled the form
+            // 1. Admin ko mail bhejo
+            $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME . ' Contact Form');
+            $mail->addAddress(MAIL_TO_ADMIN, 'Admin');
+            $mail->addReplyTo($email, $name);
 
-        $mail->isHTML(true);
-        $mail->Subject = 'New Contact Form Submission: ' . $subject;
-        $mail->Body    = "
-            <h3>New Contact Message</h3>
-            <p><strong>Name:</strong> " . htmlspecialchars($name) . "</p>
-            <p><strong>Email:</strong> " . htmlspecialchars($email) . "</p>
-            <p><strong>Phone:</strong> " . htmlspecialchars($phone) . "</p>
-            <p><strong>Subject:</strong> " . htmlspecialchars($subject) . "</p>
-            <p><strong>Message:</strong><br/>" . nl2br(htmlspecialchars($message)) . "</p>
-        ";
-        $mail->send();
+            $mail->isHTML(true);
+            $mail->Subject = 'New Contact: ' . $subject;
+            $mail->Body    = "
+                <h3>New Contact Message - Cinevo</h3>
+                <p><strong>Name:</strong> {$name}</p>
+                <p><strong>Email:</strong> {$email}</p>
+                <p><strong>Phone:</strong> {$phone}</p>
+                <p><strong>Subject:</strong> {$subject}</p>
+                <p><strong>Message:</strong><br>" . nl2br($message) . "</p>
+            ";
+            $mail->send();
 
-        // 2. Send Auto-responder to User
-        $mail->clearAddresses();
-        $mail->clearReplyTos();
-        
-        $mail->setFrom('apupd125690@gmail.com', 'Cinevo Support');
-        $mail->addAddress($email, $name);
-        
-        $mail->Subject = 'Thank you for contacting us - Cinevo';
-        $mail->Body    = 'Hi ' . htmlspecialchars($name) . ',<br><br>Welcome to <b>Cinevo</b>! Thank you for getting in touch. We have received your message and will get back to you shortly.<br><br>Best regards,<br>Cinevo Team';
-        
-        $mail->send();
+            // 2. User ko auto-reply
+            $mail->clearAddresses();
+            $mail->clearReplyTos();
+            $mail->setFrom(MAIL_FROM, MAIL_FROM_NAME . ' Support');
+            $mail->addAddress($email, $name);
+            $mail->Subject = 'Thank you for contacting us - Cinevo';
+            $mail->Body    = 'Hi ' . $name . ',<br><br>Welcome to <b>Cinevo</b>! Thank you for getting in touch. We have received your message and will get back to you shortly.<br><br>Best regards,<br>Cinevo Team';
+            $mail->send();
 
-        $message_sent = true;
-    } catch (Exception $e) {
-        $error_message = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            $message_sent = true;
+        } catch (Exception $e) {
+            $error_message = "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
     }
 }
 ?>

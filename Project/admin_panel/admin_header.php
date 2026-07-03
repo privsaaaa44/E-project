@@ -23,11 +23,15 @@ switch ($current_page) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Cinevo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- FontAwesome - Local CSS -->
+    <link rel="stylesheet" href="../css/lib/fontawesome.all.min.css">
+    <!-- Bootstrap - Local CSS -->
+    <link href="../css/lib/bootstrap.min.css" rel="stylesheet">
+    <!-- Select2 - Local CSS -->
+    <link href="../css/lib/select2.min.css" rel="stylesheet">
     <link href="admin_modern.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js - Local File -->
+    <script src="../js/lib/chart.js"></script>
 </head>
 <body>
     <nav id="sidebar">

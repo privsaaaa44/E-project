@@ -1,0 +1,11 @@
+# PHPMailer library files ko direct browser access se protect karo
+<FilesMatch "\.(php|json|lock)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Sirf vendor directory ko allow karo (PHP include se hi access hoga)
+<Files "autoload.php">
+    Order Allow,Deny
+    Deny from all
+</Files>

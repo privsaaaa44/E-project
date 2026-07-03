@@ -2,7 +2,8 @@
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-include_once 'connection.php';
+// __DIR__ use karo taake hosting par bhi sahi path mile
+include_once __DIR__ . '/connection.php';
 
 function set_flash($type, $message)
 {
@@ -19,9 +20,47 @@ function get_flash()
     return $flash;
 }
 
+/**
+ * Hosting-safe redirect function
+ * Relative path automatically absolute URL mein convert hoti hai
+ */
 function redirect_to($path)
 {
-    header("Location: {$path}");
+    // Agar already absolute URL hai to direct use karo
+    if (strpos($path, 'http://') === 0 || strpos($path, 'https://') === 0) {
+        header("Location: {$path}");
+        exit();
+    }
+
+    // Server se base URL detect karo (hosting par bhi kaam karega)
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+    $host = $_SERVER['HTTP_HOST'];
+
+    // Script ka directory path pata karo
+    // code.php project root mein hai
+    $scriptDir = dirname($_SERVER['SCRIPT_NAME']);
+
+    // Project root calculate karo
+    // Agar admin_panel ke andar se call hua to ek level upar
+    $currentScript = basename($_SERVER['SCRIPT_NAME']);
+    $currentDir = basename(dirname($_SERVER['SCRIPT_NAME']));
+
+    if ($currentDir === 'admin_panel') {
+        // admin_panel ke andar se call -> project root ek level upar
+        $projectRoot = dirname(dirname($_SERVER['SCRIPT_NAME']));
+    } else {
+        // Direct project root se call
+        $projectRoot = dirname($_SERVER['SCRIPT_NAME']);
+    }
+
+    // Trailing slash hatao
+    $projectRoot = rtrim($projectRoot, '/');
+
+    // Path ke aage slash lagao agar nahi hai
+    $path = ltrim($path, '/');
+
+    $fullUrl = $protocol . '://' . $host . $projectRoot . '/' . $path;
+    header("Location: {$fullUrl}");
     exit();
 }
 
@@ -29,8 +68,8 @@ function require_admin()
 {
     if (!isset($_SESSION['user_role']) || $_SESSION['user_role'] !== 'admin') {
         set_flash('danger', 'Admin access required.');
-        $isAdminDir = basename(dirname($_SERVER['PHP_SELF'])) === 'admin_panel';
-        redirect_to($isAdminDir ? '../login.php' : 'login.php');
+        // redirect_to() ab automatically project root se login.php find kar lega
+        redirect_to('login.php');
     }
 }
 
